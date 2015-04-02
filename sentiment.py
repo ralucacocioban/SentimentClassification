@@ -56,10 +56,12 @@ def polarity_classifier(tweets, test=None):
     # join the train and the test
     train_set = pos_train + neg_train
 
+    # run the classifier
+    nb = nltk.NaiveBayesClassifier.train(train_set)
+
     if test:
         test_set = pos_test + neg_test
         print(nltk.classify.accuracy(classifier, test_set))
-        classifier.show_most_informative_features(5)
+        nb.show_most_informative_features(5)
 
-    # run the classifier
-    return nltk.NaiveBayesClassifier.train(train_set)
+    return nb
