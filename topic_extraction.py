@@ -8,10 +8,14 @@ from gensim.models import Word2Vec
 
 stemmer = SnowballStemmer("english")
 
-def remove_stopwords(tokens):
-    return [token for token in tokens if token not in stopwords.words('english') and token not in string.punctuation]
 
-def remove_numbe
+def remove_stopwords(tokens):
+    return [
+        token
+        for token in tokens
+        if token not in stopwords.words('english')
+        and token not in string.punctuation
+    ]
 
 if __name__ == "__main__":
     filename = "debate08_sentiment_tweets.tsv"
