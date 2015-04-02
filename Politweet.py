@@ -5,7 +5,7 @@ pd.set_option('display.max_colwidth', 1200)
 import numpy as np
 from IPython.display import display
 import nltk
-from spacy.en import English
+
 
 
 # Retrieving the tweets from a file
