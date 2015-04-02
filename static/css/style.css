@@ -1,0 +1,24 @@
+body {
+  background-color: #eff1f5;
+  color: #4e5a66;
+}
+.paper {
+  margin-top: 30px;
+  background-color: #ffffff;
+
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,#fff), color-stop(50%,#fff), color-stop(50%,#c0c5ce));
+}
+.line > .inside {
+  margin: 0 10px;
+  border-bottom: 2px dashed #dfe1e8;
+  overflow: hidden;
+  padding: 10px 0;
+}
+
+.debate {
+  font-size: 1.2em;
+  line-height: 1.7em;
+}
+
+.line {
+}
