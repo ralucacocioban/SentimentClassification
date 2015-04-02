@@ -29,7 +29,7 @@ function divideTweetsByDebate(tweets, debate) {
       tweets_count++;
     }
     splits.push({
-      debate:debate[i-1] ? debate[i-1] : {},
+      debate:debate[i-1] ? debate[i-1] : {who:"begins"},
       tweets:during
     })
   });
