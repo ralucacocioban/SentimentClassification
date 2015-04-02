@@ -1,12 +1,11 @@
+from __future__ import unicode_literals
 import re
 import pandas as pd
 pd.set_option('display.max_colwidth', 1200)
 import numpy as np
 from IPython.display import display
 import nltk
-from __future__ import unicode_literals
 from spacy.en import English
-nlp = English()
 
 
 # Retrieving the tweets from a file
