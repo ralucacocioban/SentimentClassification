@@ -1,13 +1,61 @@
+function debateClean(d) {
+  d.date = moment(
+    "27 September 2008 " + d.date,
+    "DD MMMM YYYY hh:mm:ss"
+  ).add(1, 'hour')
+  return d
+}
+
+function tweetsClean(d) {
+  d["date"] = moment(
+    d["pub.date.GMT"],
+    "M/DD/YY h:mm"
+  )
+  delete d["pub.date.GMT"];
+  return d
+}
+var i = 0;
+function divideTweetsByDebate(tweets, debate) {
+  var splits = []
+  var tweets_count = 0;
+
+  debate.forEach(function(sentence, i) {
+    var during = []
+    while(
+      tweets[tweets_count]
+      && +tweets[tweets_count].date < +sentence.date
+    ) {
+      during.push(tweets[tweets_count])
+      tweets_count++;
+    }
+    splits.push({
+      debate:debate[i-1] ? debate[i-1] : {},
+      tweets:during
+    })
+  });
+
+  splits.push({
+    debate: debate[debate.length-1],
+    tweets: tweets.slice(tweets_count-1)
+  })
+  return splits
+}
+
 var politweet = angular.module("politweet", [])
   .controller("Debate", function() {
 
   })
   .controller("Main", function($scope) {
-    $scope.debate = [{
-        sentence: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquet mattis diam. Integer sit amet laoreet ex. Curabitur venenatis, mi a vulputate consectetur, nunc turpis pulvinar turpis, id aliquet dui neque non tellus. Vivamus sollicitudin, metus nec varius tincidunt, lectus tellus dictum nibh, id bibendum nisl mauris convallis massa. Proin vel ante at neque scelerisque dapibus sed at nibh. ",
-        analysis: {}
-      }, {
-        sentence: "Aenean accumsan vulputate mi, aliquam pulvinar dolor mollis id. Aenean egestas augue eu blandit lacinia. Integer varius felis orci, sit amet vestibulum elit vestibulum eu. Morbi cursus lacinia elit sed mollis. Maecenas nec ultricies ipsum. Cras vestibulum elementum diam sit amet elementum.",
-        analysis: {}
-      }]
+    $scope.debate = []
+    $scope.tweets = []
+    d3.csv('debatetranscript.csv', debateClean, function(err, debate) {
+
+      d3.tsv('tweets.tsv', tweetsClean, function(err, tweets) {
+        $scope.$apply(function() {
+          $scope.debate = debate
+          $scope.tweets = tweets
+          $scope.splits = divideTweetsByDebate(tweets, debate)
+        })
+      })
+    })
   })

@@ -22,3 +22,10 @@ body {
 
 .line {
 }
+
+.tweets {
+  font-size: 0.8em;
+}
+.tweet {
+  margin-bottom: 10px;
+}
