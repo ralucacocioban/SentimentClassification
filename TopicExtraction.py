@@ -9,9 +9,12 @@ from gensim.models import Word2Vec
 stemmer = SnowballStemmer("english")
 
 def remove_stopwords(tokens):
-    return [token for token in tokens if token not in stopwords.words('english') and token not in string.punctuation]
+    # Remove stopwords, punctuations and numbers
+    temp = [token for token in tokens if token not in stopwords.words('english') and token not in string.punctuation and not token.isdigit()]
+    regex = re.compile("//www.\S+.\S+/")
+    no_links = [token for token in temp if token != "http" or token not in regex.findall(token)]
+    return no_links
 
-def remove_numbe
 
 if __name__ == "__main__":
     filename = "debate08_sentiment_tweets.tsv"
