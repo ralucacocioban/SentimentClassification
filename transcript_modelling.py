@@ -2,8 +2,9 @@ import nltk
 import datetime
 import os
 import re
-from nltk.corpus import brown 
+from nltk.corpus import brown, stopwords
 import gensim
+import string
 
 transcript_file = open('datasets/transcript.csv').read()
 
@@ -19,7 +20,7 @@ def tokenize(speech):
 
 def normalise_word(word):
 	#word = word.lower()
-	#word = stemmer.stem_word(word) not impressed with this tool. 
+	#word = stemmer.stem_word(word) not impressed with this tool.
 	word = lemmatizer.lemmatize(word)
 	return word
 
@@ -41,7 +42,7 @@ def get_nouns(speech):
 				nouns.append(item[0])
 
 	return nouns
-			
+
 def freq_dist(speech):
 	fdist = nltk.FreqDist(speech)
 	for key in fdist:
@@ -59,7 +60,7 @@ for row in data:
 
 		# print date, person
 
-		normalised = [normalise_word(word) for word in nltk.word_tokenize(quote)]
+		normalised = [normalise_word(word.lower()) for word in nltk.word_tokenize(quote) if normalise_word(word.lower()) not in stopwords.words('english') and normalise_word(word.lower()) not in string.punctuation]
 		tokenized = tokenize(" ".join(normalised))
 
 		nouns = get_nouns(tokenized)
