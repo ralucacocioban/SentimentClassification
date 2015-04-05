@@ -3,7 +3,7 @@ import datetime
 import os
 import re
 from nltk.corpus import brown, stopwords
-import gensim
+from gensim.models import Word2Vec
 import string
 
 lemmatizer = nltk.WordNetLemmatizer()
@@ -48,6 +48,13 @@ def get_speeches():
 	transcript_file.close()
 	return data
 
+
+#some sentences have word1.word2, just simple replace of full stop
+def clean_up_speech(speech):
+	speech = speech.replace('.', ' ')
+	return speech
+
+
 #returns a list containing a triple (name, date, bag of nounds)
 def get_name_person_bow():
 	speeches = get_speeches()
@@ -63,7 +70,7 @@ def get_name_person_bow():
 			#will use this data after to assign topics to these times and whom was speacking at that particular time
 			date = row[0: index[0]]
 			person = row[index[0]+1: index[1]]
-			quote = row[index[1]+1:]
+			quote = clean_up_speech(row[index[1]+1:])
 
 			# print date, person
 
@@ -78,3 +85,20 @@ def get_name_person_bow():
 				nouns_from_speeches.append((person, date, []))
 
 	return nouns_from_speeches
+
+def gensim_modelling():
+
+	googlenewsfilepath = os.path.join('/Users/Manal/Downloads', 'GoogleNews-vectors-negative300.bin')
+
+	model = Word2Vec.load_word2vec_format(googlenewsfilepath, binary=True)
+
+	data = get_name_person_bow()
+	for row in data:
+		print row[2]
+		print 'doesn\'t match'
+		print model.doesnt_match(row[2].split())
+		print 'similarities'
+		print model.similarity(row[2].split())
+		print '#######\n\n'
+
+gensim_modelling()
