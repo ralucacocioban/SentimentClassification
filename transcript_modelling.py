@@ -6,12 +6,6 @@ from nltk.corpus import brown, stopwords
 import gensim
 import string
 
-transcript_file = open('datasets/transcript.csv').read()
-
-data = transcript_file.split('\n')
-
-nouns_from_speeches = list()
-
 lemmatizer = nltk.WordNetLemmatizer()
 stemmer = nltk.stem.porter.PorterStemmer()
 
@@ -48,24 +42,39 @@ def freq_dist(speech):
 	for key in fdist:
 		print fdist[key], key
 
-for row in data:
+def get_speeches():
+	transcript_file = open('datasets/transcript.csv')
+	data = transcript_file.read().split('\n')
+	transcript_file.close()
+	return data
 
-	pattern = re.compile(',')
-	index = [m.start() for m in pattern.finditer(row)]
-	if index:
-		#will use this data after to assign topics to these times and whom was speacking at that particular time
-		date = row[0: index[0]]
-		person = row[index[0]+1: index[1]]
-		quote = row[index[1]+1:]
+#returns a list containing a triple (name, date, bag of nounds)
+def get_name_person_bow():
+	speeches = get_speeches()
 
-		# print date, person
+	nouns_from_speeches = list()
 
-		normalised = [normalise_word(word.lower()) for word in nltk.word_tokenize(quote) if normalise_word(word.lower()) not in stopwords.words('english') and normalise_word(word.lower()) not in string.punctuation]
-		tokenized = tokenize(" ".join(normalised))
+	for row in speeches:
 
-		nouns = get_nouns(tokenized)
-		print nouns
+		pattern = re.compile(',')
+		index = [m.start() for m in pattern.finditer(row)]
+		
+		if index:
+			#will use this data after to assign topics to these times and whom was speacking at that particular time
+			date = row[0: index[0]]
+			person = row[index[0]+1: index[1]]
+			quote = row[index[1]+1:]
 
-		#treat each bunch of nouns as a sentence to input into gensim model
-		if nouns:
-			nouns_from_speeches.append(nouns)
+			# print date, person
+
+			normalised = [normalise_word(word.lower()) for word in nltk.word_tokenize(quote) if normalise_word(word.lower()) not in stopwords.words('english') and normalise_word(word.lower()) not in string.punctuation]
+			tokenized = tokenize(" ".join(normalised))
+
+			nouns = get_nouns(tokenized)
+			
+			nouns_from_speeches.append((person, date, nouns))
+
+	for i in nouns_from_speeches:
+		print i
+
+get_name_person_bow()
