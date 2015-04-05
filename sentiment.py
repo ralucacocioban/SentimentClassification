@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import classifiers
 import re
 import nltk
-from politweet import get_tweets, get_transcript, pre_processing
+from Politweet import get_tweets, get_transcript, pre_processing
 import ratings
 
 
@@ -50,25 +50,9 @@ def polarity_featurize(document):
     features['polarity(-)'] = not minus_regex.match(document["content"])
     return features
 
-def featurize(tweet):
-    # tokenize into words
-    tokens = [word for sent in sent_tokenize(tweet) for word in word_tokenize(sent)]
 
-    # remove stopwords
-    stop = stopwords.words('english')
-    tokens = [token for token in tokens if token not in stop]
-
-    # remove words less than three letters
-    tokens = [word for word in tokens if len(word) >= 3]
-
-    # lower capitalization
-    tokens = [word.lower() for word in tokens]
-
-    # lemmatize
-    lmtzr = WordNetLemmatizer()
-    tokens = [lmtzr.lemmatize(word) for word in tokens]
-
-    return tokens
+def classify(df, classifier, featurize_f=polarity_featurize):
+    return [(i, classifier.classify(featurize_f(d))) for i, d in df.iterrows()]
 
 
 def polarity_filter(df):
@@ -103,10 +87,6 @@ def polarity_train(df, test=None):
         nb.show_most_informative_features(5)
 
     return nb
-
-
-def classify(df, classifier, featurize_f=polarity_featurize):
-    return [(i, classifier.classify(featurize_f(d))) for i, d in df.iterrows()]
 
 
 def prob_classify(df, classifier, featurize_f=polarity_featurize):
