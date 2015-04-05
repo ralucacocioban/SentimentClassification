@@ -7,7 +7,9 @@ from nltk.corpus import wordnet as wn
 lmtzr = nltk.WordNetLemmatizer()
 stop = nltk.corpus.stopwords.words('english')
 stop += ["@", "#"]
-punct = [',', '.', ':', ';', '``', '\'\'', '\'s', '\'m']
+punct = [',', '.', ':', ';', '``', '\'\'', 'POS']
+skip = ['\'s', '\'m', '\'re', '(', ')', '>', '<']
+
 
 def get_tweets(filename, pickle="tweets.pickle"):
     """Retrieving the tweets from a file"""
@@ -67,7 +69,7 @@ def tokenizer(tweet):
     tokens = []
     # tokenize into words
     for sent in sentences:
-        tokens += nltk.pos_tag(nltk.word_tokenize(sent))
+        tokens += nltk.pos_tag(nltk.word_tokenize(sent.lower()))
     # lemmatize
     tokens = [dict(token=t, pos=p, lemma=lemmatize(t, p)) for t, p in tokens]
 
@@ -83,7 +85,7 @@ def tokenizer(tweet):
                 tokens[i + 1]["token"] = "#" + tokens[i + 1]["token"]
 
     # removing stopwords
-    tokens = [token for token in tokens if token["lemma"].lower() not in stop]
+    tokens = [token for token in tokens if token["lemma"] not in stop+skip]
 
     return tokens
 
