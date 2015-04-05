@@ -3,11 +3,6 @@ import pandas as pd
 import nltk
 import ratings
 
-# regular expressions to match - and +
-plus_regex = re.compile(".*(\+[0-9]+).*")
-minus_regex = re.compile(".*([^0-9]\-[0-9]+).*")
-
-
 def get_tweets(filename):
     """Retrieving the tweets from a file"""
     return pd.read_csv(

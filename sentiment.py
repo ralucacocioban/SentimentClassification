@@ -7,12 +7,12 @@ import ratings
 
 
 plus_regex = re.compile(".*(\+[0-9]+).*")
-minus_regex = re.compile(".*([^0-9]\-[0-9]+).*")
+minus_regex = re.compile(".*((^|[^0-9])\-[0-9]+).*")
 
 
 def minus_df(df):
     """Extract all the tweets with -"""
-    return df[df["content"].str.contains("[^0-9]\-[0-9]+")]
+    return df[df["content"].str.contains("(^|[^0-9])\-[0-9]+")]
 
 
 def plus_df(df):
