@@ -2,14 +2,9 @@ import nltk
 import datetime
 import os
 import re
-from nltk.corpus import brown 
-import gensim
-
-transcript_file = open('datasets/transcript.csv').read()
-
-data = transcript_file.split('\n')
-
-nouns_from_speeches = list()
+from nltk.corpus import brown, stopwords
+from gensim.models import Word2Vec
+import string
 
 lemmatizer = nltk.WordNetLemmatizer()
 stemmer = nltk.stem.porter.PorterStemmer()
@@ -19,7 +14,7 @@ def tokenize(speech):
 
 def normalise_word(word):
 	#word = word.lower()
-	#word = stemmer.stem_word(word) not impressed with this tool. 
+	#word = stemmer.stem_word(word) not impressed with this tool.
 	word = lemmatizer.lemmatize(word)
 	return word
 
@@ -41,30 +36,69 @@ def get_nouns(speech):
 				nouns.append(item[0])
 
 	return nouns
-			
+
 def freq_dist(speech):
 	fdist = nltk.FreqDist(speech)
 	for key in fdist:
 		print fdist[key], key
 
-for row in data:
+def get_speeches():
+	transcript_file = open('datasets/transcript.csv')
+	data = transcript_file.read().split('\n')
+	transcript_file.close()
+	return data
 
-	pattern = re.compile(',')
-	index = [m.start() for m in pattern.finditer(row)]
-	if index:
-		#will use this data after to assign topics to these times and whom was speacking at that particular time
-		date = row[0: index[0]]
-		person = row[index[0]+1: index[1]]
-		quote = row[index[1]+1:]
 
-		# print date, person
+#some sentences have word1.word2, just simple replace of full stop
+def clean_up_speech(speech):
+	speech = speech.replace('.', ' ')
+	return speech
 
-		normalised = [normalise_word(word) for word in nltk.word_tokenize(quote)]
-		tokenized = tokenize(" ".join(normalised))
 
-		nouns = get_nouns(tokenized)
-		print nouns
+#returns a list containing a triple (name, date, bag of nounds)
+def get_name_person_bow():
+	speeches = get_speeches()
 
-		#treat each bunch of nouns as a sentence to input into gensim model
-		if nouns:
-			nouns_from_speeches.append(nouns)
+	nouns_from_speeches = list()
+
+	for row in speeches:
+
+		pattern = re.compile(',')
+		index = [m.start() for m in pattern.finditer(row)]
+
+		if index:
+			#will use this data after to assign topics to these times and whom was speacking at that particular time
+			date = row[0: index[0]]
+			person = row[index[0]+1: index[1]]
+			quote = clean_up_speech(row[index[1]+1:])
+
+			# print date, person
+
+			normalised = [normalise_word(word.lower()) for word in nltk.word_tokenize(quote) if normalise_word(word.lower()) not in stopwords.words('english') and normalise_word(word.lower()) not in string.punctuation]
+			tokenized = tokenize(" ".join(normalised))
+
+			nouns = get_nouns(tokenized)
+
+			if nouns:
+				nouns_from_speeches.append((person, date, nouns))
+			else:
+				nouns_from_speeches.append((person, date, []))
+
+	return nouns_from_speeches
+
+def gensim_modelling():
+
+	googlenewsfilepath = os.path.join('/Users/Manal/Downloads', 'GoogleNews-vectors-negative300.bin')
+
+	model = Word2Vec.load_word2vec_format(googlenewsfilepath, binary=True)
+
+	data = get_name_person_bow()
+	for row in data:
+		print row[2]
+		print 'doesn\'t match'
+		print model.doesnt_match(row[2].split())
+		print 'similarities'
+		print model.similarity(row[2].split())
+		print '#######\n\n'
+
+gensim_modelling()
