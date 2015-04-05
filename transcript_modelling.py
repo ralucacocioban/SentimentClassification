@@ -58,7 +58,7 @@ def get_name_person_bow():
 
 		pattern = re.compile(',')
 		index = [m.start() for m in pattern.finditer(row)]
-		
+
 		if index:
 			#will use this data after to assign topics to these times and whom was speacking at that particular time
 			date = row[0: index[0]]
@@ -71,10 +71,10 @@ def get_name_person_bow():
 			tokenized = tokenize(" ".join(normalised))
 
 			nouns = get_nouns(tokenized)
-			
-			nouns_from_speeches.append((person, date, nouns))
 
-	for i in nouns_from_speeches:
-		print i
+			if nouns:
+				nouns_from_speeches.append((person, date, nouns))
+			else:
+				nouns_from_speeches.append((person, date, []))
 
-get_name_person_bow()
+	return nouns_from_speeches
