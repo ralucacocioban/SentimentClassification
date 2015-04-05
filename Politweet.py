@@ -7,7 +7,7 @@ from nltk.corpus import wordnet as wn
 lmtzr = nltk.WordNetLemmatizer()
 stop = nltk.corpus.stopwords.words('english')
 stop += ["@", "#"]
-
+punct = [',','.']
 
 def get_tweets(filename, pickle="tweets.pickle"):
     """Retrieving the tweets from a file"""
@@ -95,8 +95,9 @@ def pre_processing(df):
         lambda x: re.sub(r'MCCAINs?', 'McCain', x, flags=re.IGNORECASE))
     df["content"] = df["content"].apply(
         lambda x: re.sub(r'Obama|Barack', 'Obama', x, flags=re.IGNORECASE))
-    df["tokens"] = df["content"].apply(nltk.tokenize.word_tokenize)
     df["clean"] = df["content"].apply(tokenizer)
+    df["tokens"] = df["clean"].apply(
+        lambda tokens: [token["lemma"] for token in tokens if token["lemma"] not in punct])
     return df
 
 
