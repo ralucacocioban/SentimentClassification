@@ -4,11 +4,15 @@ import pandas as pd
 import nltk
 from nltk.corpus import wordnet as wn
 
+import string
+
 lmtzr = nltk.WordNetLemmatizer()
 stop = nltk.corpus.stopwords.words('english')
 stop += ["@", "#"]
-punct = [',', '.', ':', ';', '``', '\'\'', 'POS']
-skip = ['\'s', '\'ve', '\'d', '\'ll', '\'m', '\'re', '(', ')', '>', '<', 'http', 'almost']
+POS = [',', '.', ':', ';', '``', '\'\'', 'POS', 'RB', 'RBR', 'RBS']
+skip = [
+    '\'s', '\'ve', '\'d', '\'ll', '\'m', '\'re', '(', ')', '>', '<', 'http',
+    'almost', '#tweetdebate', '#debate', '#current', '#debate08']
 
 
 def get_tweets(filename, pickle="tweets.pickle"):
@@ -85,7 +89,7 @@ def tokenizer(tweet):
                 tokens[i + 1]["token"] = "#" + tokens[i + 1]["token"]
 
     # removing stopwords
-    tokens = [token for token in tokens if token["lemma"] not in stop+skip]
+    tokens = [token for token in tokens if token["lemma"] not in stop + skip]
 
     return tokens
 
@@ -99,7 +103,10 @@ def pre_processing(df):
         lambda x: re.sub(r'Obama|Barack', 'Obama', x, flags=re.IGNORECASE))
     df["clean"] = df["content"].apply(tokenizer)
     df["tokens"] = df["clean"].apply(
-        lambda tokens: [token["lemma"] for token in tokens if token["pos"] not in punct])
+        lambda tokens: [
+            token["lemma"]
+            for token in tokens
+            if token["pos"] not in POS])
     return df
 
 
