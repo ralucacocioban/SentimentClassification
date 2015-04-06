@@ -8,7 +8,7 @@ lmtzr = nltk.WordNetLemmatizer()
 stop = nltk.corpus.stopwords.words('english')
 stop += ["@", "#"]
 punct = [',', '.', ':', ';', '``', '\'\'', 'POS']
-skip = ['\'s', '\'ll', '\'m', '\'re', '(', ')', '>', '<']
+skip = ['\'s', '\'ve', '\'d', '\'ll', '\'m', '\'re', '(', ')', '>', '<', 'http', 'almost']
 
 
 def get_tweets(filename, pickle="tweets.pickle"):
