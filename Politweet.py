@@ -111,7 +111,9 @@ def pre_processing(df):
         lambda tokens: [
             token["lemma"]
             for token in tokens
-            if token["pos"] not in punct])
+            if token["pos"] not in punct
+            and len(token["lemma"]) > 2
+            and token["lemma"][0] not in ['#', '@']])
     return df
 
 
