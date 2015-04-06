@@ -3,13 +3,12 @@ import re
 import pandas as pd
 import nltk
 from nltk.corpus import wordnet as wn
-
 import string
 
 lmtzr = nltk.WordNetLemmatizer()
 stop = nltk.corpus.stopwords.words('english')
 stop += ["@", "#"]
-POS = [',', '.', ':', ';', '``', '\'\'', 'POS', 'RB', 'RBR', 'RBS']
+punct = [',', '.', ':', ';', '``', '\'\'', 'POS']
 skip = [
     '\'s', '\'ve', '\'d', '\'ll', '\'m', '\'re', '(', ')', '>', '<', 'http',
     'almost', '#tweetdebate', '#debate', '#current', '#debate08']
@@ -75,6 +74,12 @@ def tokenizer(tweet):
     for sent in sentences:
         tokens += nltk.pos_tag(nltk.word_tokenize(sent.lower()))
     # lemmatize
+    tokens = [
+        (
+            "".join(l for l in t if l not in string.punctuation),
+            "".join(l for l in p if l not in string.punctuation)
+        ) for t, p in tokens]
+
     tokens = [dict(token=t, pos=p, lemma=lemmatize(t, p)) for t, p in tokens]
 
     # do not treat # or @ as tokens
@@ -106,7 +111,7 @@ def pre_processing(df):
         lambda tokens: [
             token["lemma"]
             for token in tokens
-            if token["pos"] not in POS])
+            if token["pos"] not in punct])
     return df
 
 
