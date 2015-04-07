@@ -16,14 +16,16 @@ def remove_stopwords(tokens):
     no_links = [token for token in temp if token != "http" or token not in regex.findall(token)]
     return no_links
 
-# Get the file from this link: https://code.google.com/p/word2vec/
+
 def load_word2vec_model(c_bin):
+    """Get the file from this link: https://code.google.com/p/word2vec/"""
     if not os.path.isfile(c_bin):
         sys.exit("""File '{0}' does not exist.""".format(c_bin))
 
     model = Word2Vec.load_word2vec_format(c_bin, binary=True)
 
     return model
+
 
 def input_check(tweets, word2vec):
     if not os.path.isfile(tweets):
@@ -42,9 +44,9 @@ def main():
     Instruction how to use this tool.
     python TopicExtraction.py --tweets [tweet dataset path] --word2vec [word2vec model path]
     """
-    
+
     parser = ArgumentParser(description='Extract topics from tweeter dataset.')
-    parser.add_argument('--tweets', '-t', help='File path of the tweets dataset.', required=True)
+    parser.add_argument('--tweets', '-t',help='File path of the tweets dataset.', required=True)
     parser.add_argument('--word2vec', '-w2v', help='File path of the word2vec model.', required=True)
     args = parser.parse_args()
 
@@ -65,7 +67,6 @@ def main():
     print "Loading word2vec model..."
     word2vec_model = load_word2vec_model(args.word2vec)
     print "Done loading word2vec model."
-
 
 
 if __name__ == "__main__":
