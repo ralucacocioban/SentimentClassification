@@ -87,16 +87,3 @@ def excludeTerm(sentiword):
 		return True;
 	else:
 		return False;	
-
-
-if __name__ == '__main__':
-
-	#x = Politweet.get_tweets('/Users/ralucamelon/Documents/UCL3/IR_DataMining/SentimentClassification/datasets/tweets.tsv', pickle="tweets.pickle");
-	#print x["content"];
-	s1 = 'McCain seems to start every sentence with "the point is that...." #tweetdebate #current';
-	s2 = "@davidweiner You're playing that game?  I'm drinking everytime I hear #economy."; 
-	s3 = "McCain -1 avoiding the question? wait, waht was the question exactly.. #tweetdebate	bluejack"
-	s4 = "@current  Ah yes, the pot and the kettle are debating who is to blame for the proverbial heat in the kitchen."
-	s5 = "#tweetdebate Obama right to focus on issues in deregulation, and McCain ignoring these issues";
-
-	avgBasedClassifier(s5);		 
