@@ -88,3 +88,4 @@ if __name__ == "__main__":
         line = plt.plot(minutes_converted, topic_strength, label=topic)
     # Plot graph
     plt.show()
+    save_topics()
