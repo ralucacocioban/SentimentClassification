@@ -6,6 +6,9 @@ from Politweet import get_tweets, get_transcript, pre_processing
 import ratings
 
 
+happy_regex = re.compile(".*([:;8=xX]-?[\)\]D]).*")
+sad_regex = re.compile(".*([:;8=]'?-?[\(\[\|]).*")
+
 plus_regex = re.compile(".*(\+[0-9]+).*")
 minus_regex = re.compile(".*((^|[^0-9])\-[0-9]+).*")
 
