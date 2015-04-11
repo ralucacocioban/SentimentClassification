@@ -3,38 +3,29 @@ import simpleSentiWordNetClassifier as simpleSWN
 import AdjBasedSentiWordNet as adjSWN
 import AvgBasedSentiWordNetClassifier as avgBasedSWN
 import SummationBasedClassifier as sumBasedSWN
+from AvgBasedScoreSWN import avgBased
+from SumBasedScoreSWN import sumBased
 from nltk.corpus import sentiwordnet as swn
 import ratings
 import Politweet as ptweet
 
 if __name__ == '__main__':
-
-	s1 = 'McCain seems to start every sentence with "the point is that...." #tweetdebate #current';
-	s2 = "@davidweiner You're playing that game?  I'm drinking everytime I hear #economy."; 
-	s3 = "McCain -1 avoiding the question? wait, waht was the question exactly.. #tweetdebate	bluejack"
-	s4 = "@current  Ah yes, the pot and the kettle are debating who is to blame for the proverbial heat in the kitchen."
-	s5 = "#tweetdebate Obama right to focus on issues in deregulation, and McCain ignoring these issues";
-
-	s7 = "There is a spectrum, it is not merely just awful-or-awesome!"
 	s8 = "if ur oldest candidate in history, why start with i'm not feeling great .. makes u thing you re not looking great either #tweetdebate"
-	s9 = "Obama: 1 , McCain 0 : McCain didn't answer the question #tweetdebate"
-	s10 = "McCain is not answering the questions  #tweetdebate"
-	s11 = "They won't even look at each other."
-	s12 = "McCain: I don't mean to go back and forth???"
+	
 
 	TEST = s8;
 
 	
-	tweets = ptweet.get_tweets('./datasets/tweets.tsv');
+	# tweets = ptweet.get_tweets('./datasets/tweets.tsv');
 
-	pos = ratings.all(tweets, ratings.POSITIVE)
-	neg = ratings.all(tweets, ratings.NEGATIVE)
+	# pos = ratings.all(tweets, ratings.POSITIVE)
+	# neg = ratings.all(tweets, ratings.NEGATIVE)
 
+	# print simpleSWN.simpleSentiWordNetClasifier(TEST); 
+	# print "adj based";
+	# print adjSWN.adjBasedSentiWordNetClassifier(TEST);
 	
-	print simpleSWN.simpleSentiWordNetClasifier(TEST); 
-	print "adj based";
-	print adjSWN.adjBasedSentiWordNetClassifier(TEST);
-	print "avg based";
-	print avgBasedSWN.avgBasedClassifier(TEST);		
 	print "sum based";
-	print sumBasedSWN.sumBasedClassifier(TEST);	
+	print sumBased(TEST);		
+	print "avg based";
+	print avgBased(TEST);	
