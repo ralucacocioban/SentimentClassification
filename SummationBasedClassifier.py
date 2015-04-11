@@ -6,6 +6,8 @@ import sentiWordNet as swnet
 import Politweet as ptweet
 from nltk.corpus import sentiwordnet as swn
 
+from ratings import NEGATIVE, POSITIVE, MIXED, OTHER
+
 # uses a treshold value of 0 to ignore the words with 0 pos score and 0 neg score 
 # calculates 3 overall scores: pos, neg and obj for each tweet 
 # as a sum of pos, neg, obj scores of each term in the tweet that passes the threshold
@@ -13,12 +15,6 @@ from nltk.corpus import sentiwordnet as swn
 
 THRESHOLD = 0;
 POS_THRESHOLD = 0.15;
-
-# declare the three classes of classification
-NEGATIVE = 1
-POSITIVE = 2
-MIXED = 3
-OTHER = 4
 
 def sumBasedClassifier(tweet):
 

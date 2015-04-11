@@ -4,13 +4,7 @@ import nltk
 import math
 import sentiWordNet
 import Politweet
-
-
-# declare the three classes of classification
-NEGATIVE = 1
-POSITIVE = 2
-MIXED = 3
-OTHER = 4
+from ratings import NEGATIVE, POSITIVE, MIXED, OTHER
 
 
 # simple clasifier that only takes into account how many times a word#sence is more positive than negative
