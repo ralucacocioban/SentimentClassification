@@ -75,7 +75,7 @@ if __name__ == "__main__":
     plt.xlabel("Minutes since the debate started")
     # Draw graphical representation of topics
     #save_topics()
-    filter_out_topics = ["Topic 00"]
+    filter_out_topics = []
     lines = []
     # Draw lines
     for topic in data_to_plot.keys():
@@ -85,7 +85,8 @@ if __name__ == "__main__":
         # Manipulate data to make it matplotlib compatible
         minutes, topic_strength = zip(*pair_of_values)
         minutes_converted = convert_actual_time_to_secs(minutes)
-        line = plt.plot(minutes_converted, topic_strength, label=topic)
+        line = plt.plot(minutes_converted, topic_strength, label=str(topic))
+    plt.legend()
     # Plot graph
     plt.show()
     save_topics()
