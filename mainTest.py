@@ -27,16 +27,14 @@ if __name__ == '__main__':
 	
 	tweets = ptweet.get_tweets('./datasets/tweets.tsv');
 
-	print tweets['content'];
-
 	pos = ratings.all(tweets, ratings.POSITIVE)
 	neg = ratings.all(tweets, ratings.NEGATIVE)
 
-	# print "simple";
-	# simpleSWN.simpleSentiWordNetClasifier(TEST); 
-	# print "adj based";
-	# adjSWN.adjBasedSentiWordNetClassifier(TEST);
-	# print "avg based";
-	# avgBasedSWN.avgBasedClassifier(TEST);		
-	# print "sum based";
-	# sumBasedSWN.sumBasedClassifier(TEST);	
+	print "simple";
+	simpleSWN.simpleSentiWordNetClasifier(TEST); 
+	print "adj based";
+	adjSWN.adjBasedSentiWordNetClassifier(TEST);
+	print "avg based";
+	avgBasedSWN.avgBasedClassifier(TEST);		
+	print "sum based";
+	sumBasedSWN.sumBasedClassifier(TEST);	

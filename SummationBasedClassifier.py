@@ -34,18 +34,18 @@ def sumBasedClassifier(tweet):
 				overall_scores['pos'] += getTermScores(synsets)['pos'];
 				overall_scores['obj'] += getTermScores(synsets)['obj'];
 						
-	clasifyTweet(overall_scores)			
+	return clasifyTweet(overall_scores)			
 
 
 def clasifyTweet(overall_scores):
 	if(overall_scores['pos'] > overall_scores['neg']):
-		print POSITIVE;
+		return POSITIVE;
 	elif(overall_scores['neg'] > overall_scores['pos']):
-		print NEGATIVE;	
+		return NEGATIVE;	
 	elif(overall_scores['neg'] == overall_scores['pos']):
-		print MIXED;
+		return MIXED;
 	else:
-		print OTHER;		
+		return OTHER;		
 
 
 def getTermScores(sentiWords):

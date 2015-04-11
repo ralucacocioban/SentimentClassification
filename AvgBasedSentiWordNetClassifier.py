@@ -40,18 +40,18 @@ def avgBasedClassifier(tweet):
 		overall_avg['neg'] = overall_sum['neg'] / term_count;
 		overall_avg['obj'] = overall_sum['obj'] / term_count;
 											
-	clasifyTweet(overall_avg)			
+	return clasifyTweet(overall_avg)			
 
 
 def clasifyTweet(overall_avg):
 	if(overall_avg['pos'] > overall_avg['neg']):
-		print POSITIVE;
+		return POSITIVE;
 	elif(overall_avg['neg'] > overall_avg['pos']):
-		print NEGATIVE;	
+		return NEGATIVE;	
 	elif(overall_avg['neg'] == overall_avg['pos'] and overall_avg['neg'] != 0):
-		print MIXED;
+		return MIXED;
 	else:
-		print OTHER;		
+		return OTHER;		
 
 
 def getTermScores(sentiWords):

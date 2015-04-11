@@ -27,13 +27,13 @@ def simpleSentiWordNetClasifier(sentence):
 				count_vector[getSentiWordScore(synsets)] += 1;	
 
 	if(count_vector[NEGATIVE] == count_vector[POSITIVE] and count_vector[NEGATIVE] != 0):
-		sentiWordNet.printClass(MIXED);
+		return MIXED;
 	elif(count_vector[NEGATIVE] != 0 and count_vector[NEGATIVE] > count_vector[POSITIVE]):
-		sentiWordNet.printClass(NEGATIVE);
+		return NEGATIVE;
 	# elif(count_vector[POSITIVE] != 0 and count_vector[POSITIVE] > count_vector[NEGATIVE]):
 	# 	sentiWordNet.printClass(POSITIVE);		
 	else:
-		print (count_vector.index(max(count_vector)));
+		return (count_vector.index(max(count_vector)));
 
 
 def getSentiWordScore(sentiwordList):
