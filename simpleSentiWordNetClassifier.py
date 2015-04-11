@@ -32,6 +32,8 @@ def simpleSentiWordNetClasifier(sentence):
 		return NEGATIVE;
 	# elif(count_vector[POSITIVE] != 0 and count_vector[POSITIVE] > count_vector[NEGATIVE]):
 	# 	sentiWordNet.printClass(POSITIVE);		
+	elif(count_vector.index(max(count_vector))) == 0):
+		return OTHER;
 	else:
 		return (count_vector.index(max(count_vector)));
 

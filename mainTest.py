@@ -30,11 +30,11 @@ if __name__ == '__main__':
 	pos = ratings.all(tweets, ratings.POSITIVE)
 	neg = ratings.all(tweets, ratings.NEGATIVE)
 
-	print "simple";
-	simpleSWN.simpleSentiWordNetClasifier(TEST); 
+	
+	print simpleSWN.simpleSentiWordNetClasifier(TEST); 
 	print "adj based";
-	adjSWN.adjBasedSentiWordNetClassifier(TEST);
+	print adjSWN.adjBasedSentiWordNetClassifier(TEST);
 	print "avg based";
-	avgBasedSWN.avgBasedClassifier(TEST);		
+	print avgBasedSWN.avgBasedClassifier(TEST);		
 	print "sum based";
-	sumBasedSWN.sumBasedClassifier(TEST);	
+	print sumBasedSWN.sumBasedClassifier(TEST);	
