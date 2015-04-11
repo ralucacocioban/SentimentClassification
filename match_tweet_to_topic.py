@@ -1,4 +1,5 @@
 import gensim, sys, os
+import pandas as pd
 
 from nltk.corpus import brown
 
@@ -51,10 +52,17 @@ def similarity(tweetNouns, topicFromTranscript, model):
     return extract_highest(sim_tweets_topics)
 
 
+# Check if noun is related to at leat one word in the bag-of-words
+def filter_noun(noun, bow, model):
+    for b in bow:
+        if model.similarity(noun, b) > 0.5:
+            return True
+    return False
+
+
 def classify_transcript(fname, model):
     if not os.path.isfile(fname):
         sys.exit("Transcript file does not exist")
-
 
 
 if __name__ == "__main__":
@@ -62,5 +70,8 @@ if __name__ == "__main__":
 
     model = load_word2vec_model()
 
-    print similarity(["economy", "money", "veteran", "peace", "oil", "war"], ["tax", "attack"], model)
-    print similarity(["tax", "money", "president", "company"], ["tax", "attack", "house", "stock"], model)
+    fname_transcript = "datasets/transcript.csv"
+    classify_transcript()
+
+    #print similarity(["economy", "money", "veteran", "peace", "oil", "war"], ["tax", "attack"], model)
+    #print similarity(["tax", "money", "president", "company"], ["tax", "attack", "house", "stock"], model)
