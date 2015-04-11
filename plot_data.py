@@ -72,20 +72,21 @@ if __name__ == "__main__":
     y_values = [x for x in range(0, 180)]
     print "Number of Topics:", len(data_to_plot.keys())
     plt.ylabel("Topic strength")
-    plt.xlabel("Minutes since the debate started")
+    plt.xlabel("Minutes into the debate")
     # Draw graphical representation of topics
     #save_topics()
-    filter_out_topics = []
+    include_topics = ["Topic 00", "Topic 03", "Topic 04", "Topic 05", "Topic 09"]
     lines = []
     # Draw lines
     for topic in data_to_plot.keys():
-        if topic in filter_out_topics:
-            continue
-        pair_of_values = data_to_plot[topic]
-        # Manipulate data to make it matplotlib compatible
-        minutes, topic_strength = zip(*pair_of_values)
-        minutes_converted = convert_actual_time_to_secs(minutes)
-        line = plt.plot(minutes_converted, topic_strength, label=str(topic))
+        print "Topic:", topic
+        if topic in include_topics:
+            pair_of_values = data_to_plot[topic]
+            # Manipulate data to make it matplotlib compatible
+            minutes, topic_strength = zip(*pair_of_values)
+            minutes_converted = convert_actual_time_to_secs(minutes)
+            line = plt.plot(minutes_converted, topic_strength, label=str(topic))
+
     plt.legend()
     # Plot graph
     plt.show()
