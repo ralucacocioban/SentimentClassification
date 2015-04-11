@@ -19,6 +19,12 @@ def extractTopics(tweet):
 	# print topics;		
 	return topics;	
 
+def filterNouns(tweet_topics):
+	for tweet in tweet_topics:
+		nouns = tweet['topics'];
+		#here write the excluding function with similarity with relevantTopics.txt
+		print nouns
+
 if __name__ == '__main__':
 	tweets = get_tweets('./datasets/tweets.tsv')
 
@@ -28,8 +34,7 @@ if __name__ == '__main__':
 		topics = extractTopics(t['content'])
 		if(topics != []):
 			tweet_topics.append({'tweet': t['content'], 'topics' : topics});
-
-	print "results:"
-	print tweet_topics	
+	
+	filterNouns(tweet_topics)	
 
 
