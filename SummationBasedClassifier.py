@@ -54,8 +54,8 @@ def getTermScores(sentiWords):
 
 	for word in sentiWords:
 		if(word.pos_score() > THRESHOLD and word.neg_score() > THRESHOLD):
-			if(word.pos_score() > POS_THRESHOLD):
-				scores['pos'] += word.pos_score();
+			#if(word.pos_score() > POS_THRESHOLD):
+			scores['pos'] += word.pos_score();
 			scores['neg'] += word.neg_score();
 			scores['obj'] += word.obj_score();
 			# print "for word " , word
