@@ -21,7 +21,6 @@ MIXED = 3
 OTHER = 4
 
 def sumBasedClassifier(tweet):
-	print tweet
 
 	tokens = ptweet.tokenizer(tweet);
 	overall_scores = { 'pos' : 0, 'neg' : 0, 'obj' : 0};
@@ -34,20 +33,19 @@ def sumBasedClassifier(tweet):
 				overall_scores['neg'] += getTermScores(synsets)['neg'];
 				overall_scores['pos'] += getTermScores(synsets)['pos'];
 				overall_scores['obj'] += getTermScores(synsets)['obj'];
-
-	#print overall_scores						
+						
 	clasifyTweet(overall_scores)			
 
 
 def clasifyTweet(overall_scores):
 	if(overall_scores['pos'] > overall_scores['neg']):
-		swnet.printClass(POSITIVE);
+		print POSITIVE;
 	elif(overall_scores['neg'] > overall_scores['pos']):
-		swnet.printClass(NEGATIVE);	
+		print NEGATIVE;	
 	elif(overall_scores['neg'] == overall_scores['pos']):
-		swnet.printClass(MIXED);
+		print MIXED;
 	else:
-		swnet.printClass(OTHER);		
+		print OTHER;		
 
 
 def getTermScores(sentiWords):

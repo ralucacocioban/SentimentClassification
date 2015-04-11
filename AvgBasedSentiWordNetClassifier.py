@@ -19,7 +19,6 @@ MIXED = 3
 OTHER = 4
 
 def avgBasedClassifier(tweet):
-	print tweet
 	tokens = ptweet.tokenizer(tweet);
 
 	overall_sum = { 'pos' : 0, 'neg' : 0, 'obj' : 0};
@@ -32,7 +31,6 @@ def avgBasedClassifier(tweet):
 			synsets = swnet.get_samePOSsynsets(token['lemma'],sentiWordNet_pos);
 			if(synsets != None and getTermScores(synsets) != None):
 				term_count += 1;
-				print "takes into consideration: ", token
 				overall_sum['pos'] += getTermScores(synsets)['pos'];
 				overall_sum['neg'] += getTermScores(synsets)['neg'];
 				overall_sum['obj'] += getTermScores(synsets)['obj'];
@@ -47,13 +45,13 @@ def avgBasedClassifier(tweet):
 
 def clasifyTweet(overall_avg):
 	if(overall_avg['pos'] > overall_avg['neg']):
-		swnet.printClass(POSITIVE);
+		print POSITIVE;
 	elif(overall_avg['neg'] > overall_avg['pos']):
-		swnet.printClass(NEGATIVE);	
+		print NEGATIVE;	
 	elif(overall_avg['neg'] == overall_avg['pos'] and overall_avg['neg'] != 0):
-		swnet.printClass(MIXED);
+		print MIXED;
 	else:
-		swnet.printClass(OTHER);		
+		print OTHER;		
 
 
 def getTermScores(sentiWords):

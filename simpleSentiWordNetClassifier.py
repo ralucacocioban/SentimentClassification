@@ -15,7 +15,6 @@ OTHER = 4
 
 # simple clasifier that only takes into account how many times a word#sence is more positive than negative
 def simpleSentiWordNetClasifier(sentence):
-	print sentence;
 	count_vector = [0] * 5;
 
 	sentence = Politweet.tokenizer(sentence);
@@ -34,8 +33,7 @@ def simpleSentiWordNetClasifier(sentence):
 	# elif(count_vector[POSITIVE] != 0 and count_vector[POSITIVE] > count_vector[NEGATIVE]):
 	# 	sentiWordNet.printClass(POSITIVE);		
 	else:
-		sentiWordNet.printClass(count_vector.index(max(count_vector)));
-
+		print (count_vector.index(max(count_vector)));
 
 
 def getSentiWordScore(sentiwordList):
@@ -45,9 +43,6 @@ def getSentiWordScore(sentiwordList):
 	obj_entries = 0;
 
 	for sentiword in sentiwordList:
-		# print sentiword.pos_score();
-		# print sentiword.neg_score();
-		# print sentiword.obj_score();
 		if(sentiword.pos_score() > sentiword.neg_score()):
 			pos_gt_neg += 1;
 		elif(sentiword.neg_score() > sentiword.pos_score()):
@@ -56,10 +51,7 @@ def getSentiWordScore(sentiwordList):
 			obj_entries += 1;		
 		elif(sentiword.obj_score() > 0):
 			obj_entries += 1;	
-	
-	# print "pos_gt_neg", pos_gt_neg
-	# print "neg_gt_pos", neg_gt_pos
-	# print "obj entries", obj_entries
+
 
 	if(pos_gt_neg > neg_gt_pos and math.fabs(pos_gt_neg - obj_entries) < 5):
 		return POSITIVE;
