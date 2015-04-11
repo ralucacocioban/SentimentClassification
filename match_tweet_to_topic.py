@@ -38,21 +38,29 @@ def similarity(tweetNouns, topicFromTranscript, model):
     sim_tweets_topics = dict()
 
     for topic in topicFromTranscript:
-        sim_tweets_topics[topic] = 0
+        count = 0
         # If similarity between topic and noun is more than 0.5 then they are related if not ignore
         for noun in tweetNouns:
-            if model.similarity(topic, noun) > float(0.5):
+            if model.similarity(topic, noun) > 0.5:
                 # Count how many nouns are related
-                sim_tweets_topics[topic] += 1
+                count += 1
         # Calculate the total percentage of nouns that are related to this topic
-        sim_tweets_topics[topic] /= len(tweetNouns)
+        sim = float(float(count) / float(len(tweetNouns)))
+        sim_tweets_topics[topic] = sim
 
     return extract_highest(sim_tweets_topics)
 
 
+def classify_transcript(fname, model):
+    if not os.path.isfile(fname):
+        sys.exit("Transcript file does not exist")
+
 
 
 if __name__ == "__main__":
-    train_word2vec_brown()
+    #train_word2vec_brown()
 
     model = load_word2vec_model()
+
+    print similarity(["economy", "money", "veteran", "peace", "oil", "war"], ["tax", "attack"], model)
+    print similarity(["tax", "money", "president", "company"], ["tax", "attack", "house", "stock"], model)
