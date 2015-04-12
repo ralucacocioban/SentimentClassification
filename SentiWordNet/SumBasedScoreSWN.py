@@ -14,7 +14,6 @@ from ratings import NEGATIVE, POSITIVE, MIXED, OTHER
 # the sentiment polarity of the tweet is then determined by the maximum overall score  
 
 THRESHOLD = 0;
-POS_THRESHOLD = 0.15;
 
 def sumBased(tweet):
 
@@ -50,11 +49,8 @@ def getTermScores(sentiWords):
 
 	for word in sentiWords:
 		if(word.pos_score() > THRESHOLD and word.neg_score() > THRESHOLD):
-			#if(word.pos_score() > POS_THRESHOLD):
 			scores['pos'] += word.pos_score();
 			scores['neg'] += word.neg_score();
 			scores['obj'] += word.obj_score();
-			# print "for word " , word
-			# print " pos ", word.pos_score(), " neg ", word.neg_score(), " obj " ,word.obj_score()
 
 	return scores;	 
