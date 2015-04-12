@@ -1,13 +1,7 @@
 #! /usr/bin/python
 
 from nltk.corpus import sentiwordnet as swn
-
-# declare the three classes of classification
-NEGATIVE = 1
-POSITIVE = 2
-MIXED = 3
-OTHER = 4
-
+from ratings import NEGATIVE, POSITIVE, MIXED, OTHER
 
 def printClass(string):
 	if(string == NEGATIVE): print "NEGATIVE";
@@ -55,7 +49,6 @@ def getSentiWordPOS_adj(nltk_pos):
 def get_samePOSsynsets(sentiword, pos):
 	
 	listSynsets = swn.senti_synsets(sentiword, pos);
-	#print listSynsets
 	if(listSynsets):
 		return listSynsets;
 	else:
