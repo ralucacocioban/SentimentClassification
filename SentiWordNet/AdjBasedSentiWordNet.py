@@ -8,7 +8,7 @@ from ratings import NEGATIVE, POSITIVE, MIXED, OTHER
 
 
 # simple clasifier that only takes into account how many times a word#sence is more positive than negative
-def adjBasedSentiWordNetClassifier(sentence):
+def adjBasedSWNClassifier(sentence):
 	count_vector = [0] * 5
 
 	sentence = Politweet.tokenizer(sentence)
