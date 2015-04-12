@@ -8,7 +8,7 @@ import os
 import sys
 import codecs
 from Politweet import get_tweets
-from match_tweet_to_topic import load_word2vec_model, similarity,
+from match_tweet_to_topic import load_word2vec_model, similarity, filter_noun
 
 
 def extractTopics(tweet):
@@ -35,10 +35,17 @@ def read_relevant_topics(fname):
 	return relevant_topics
 
 def filterNouns(tweet_topics):
+	relevant_topics = read_relevant_topics("relevantTopics.txt")
+	model = load_word2vec_model("datasets/brown_word2vec.model")
+	ignore_list = []
 	for tweet in tweet_topics:
 		nouns = tweet['topics'];
 		#here write the excluding function with similarity with relevantTopics.txt
-		print nouns
+		filtered_nouns = [noun for noun in nouns if filter_noun(noun, relevant_topics, model) == True]
+		#print filtered_nouns
+		topic, score = similarity(filtered_nouns, relevant_topics, model)
+		print """{0}:""".format(topic), score, "\n"
+		#print nouns
 
 if __name__ == '__main__':
 	tweets = get_tweets('./datasets/tweets.tsv')
