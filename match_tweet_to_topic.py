@@ -42,12 +42,18 @@ def similarity(tweetNouns, topicFromTranscript, model):
         count = 0
         # If similarity between topic and noun is more than 0.5 then they are related if not ignore
         for noun in tweetNouns:
-            if model.similarity(topic, noun) > 0.5:
-                # Count how many nouns are related
-                count += 1
+            try:
+                if model.similarity(topic, noun) > 0.5:
+                    # Count how many nouns are related
+                    count += 1
+            except:
+                pass
         # Calculate the total percentage of nouns that are related to this topic
-        sim = float(float(count) / float(len(tweetNouns)))
-        sim_tweets_topics[topic] = sim
+        try:
+            sim = float(float(count) / float(len(tweetNouns)))
+            sim_tweets_topics[topic] = sim
+        except:
+            sim_tweets_topics[topic] = 0
 
     return extract_highest(sim_tweets_topics)
 
@@ -55,8 +61,11 @@ def similarity(tweetNouns, topicFromTranscript, model):
 # Check if noun is related to at leat one word in the bag-of-words
 def filter_noun(noun, bow, model):
     for b in bow:
-        if model.similarity(noun, b) > 0.5:
-            return True
+        try:
+            if model.similarity(noun, b) > 0.5:
+                return True
+        except:
+            pass
     return False
 
 
