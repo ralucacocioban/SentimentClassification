@@ -27,7 +27,7 @@ pd.set_option('display.max_colwidth', 1200)
 
 # In[24]:
 
-def prepare_sentiment_data(tweets):
+def prepare_candidate_data(tweets):
     obama = tweets[tweets["content"].str.contains('obama', flags=re.IGNORECASE)]
     mccain = tweets[tweets["content"].str.contains('mccain', flags=re.IGNORECASE)]
     oba_and_mccain = tweets.reindex(obama.index & mccain.index)
@@ -116,29 +116,31 @@ class RuleBasedCandidate(BaseEstimator, TransformerMixin):
         return [self.featurize(d) for d in docs]
 
 
-# In[19]:
+# ## Annotate tweets with sentiment
 
-pipeline_candidates = Pipeline([
-    ('features', FeatureUnion([
+# In[22]:
+
+def build_cand_classifier(tweets):
+    vectorizer = FeatureUnion([
         ('ngram_tf_id', Pipeline([
             ('count', CountVectorizer(tokenizer = featurize, lowercase=False)),
             ('tf_id', TfidfTransformer())
         ])),
         ('rule_based_syste', Pipeline([
-                ('match', RuleBasedCandidate()),  # returns a list of dicts
-                ('vect', DictVectorizer()),  # list of dicts -> feature matrix
-            ]))
-    ])),
-    ('classifier', LinearSVC())
-])
+            ('match', RuleBasedCandidate()),  # returns a list of dicts
+            ('vect', DictVectorizer()),  # list of dicts -> feature matrix
+        ]))
+    ])
+    pipeline_candidates = Pipeline([
+        ('features', vectorizer),
+        ('classifier', LinearSVC())
+    ])
+    train, test = prepare_candidate_data(tweets)
+    run_pipeline(train, test, pipeline_candidates)
+    return pipeline_candidates
 
-
-# ## Annotate tweets with sentiment
-
-# In[22]:
 
 def df_candidates(tweets):
-    train, test = prepare_sentiment_data(tweets)
-    run_pipeline(train, test, pipeline_candidates)
-    tweets["candidate"] = pd.Series(pipeline_candidates.predict([t for i,t in tweets.iterrows()]), index=tweets.index)
-    return tweets
+    pipeline = build_cand_classifier(tweets)
+    tweets["candidate"] = pd.Series(pipeline.predict([t for i,t in tweets.iterrows()]), index=tweets.index)
+    return tweets, pipeline

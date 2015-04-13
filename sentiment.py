@@ -11,7 +11,7 @@ import pandas as pd
 from sklearn.cross_validation import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -117,23 +117,6 @@ class RuleBasedSent(BaseEstimator, TransformerMixin):
         return [self.featurize(d) for d in docs]
 
 
-# In[113]:
-
-pipeline_tfidf = Pipeline([
-    ('features', FeatureUnion([
-        ('ngram_tf_idf', Pipeline([
-            ('counts', CountVectorizer(tokenizer = featurize, lowercase=False)),
-            ('tf_idf', TfidfTransformer())
-        ])),
-        ('rule_based_system', Pipeline([
-                ('match', RuleBasedSent()),  # returns a list of dicts
-                ('vect', DictVectorizer()),  # list of dicts -> feature matrix
-            ])),
-    ])),
-    ('classifier', LinearSVC())
-])
-
-
 # ## TF-IDF + (learned) MechTurks 
 # 
 # Since we already have the scores from AMT, we decided to learn on their labels and use as training set where they all agree
@@ -168,34 +151,46 @@ class MechTurks(BaseEstimator, TransformerMixin):
 
 # In[115]:
 
-pipeline_amazon = Pipeline([
-    ('features', FeatureUnion([
-        ('ngram_tf_idf', Pipeline([
-            ('counts', CountVectorizer(tokenizer = featurize, lowercase=False)),
-            ('tf_idf', TfidfTransformer())
-        ])),
-        ('mechturks_pipe', Pipeline([
-                ('mecturks', MechTurks()),  # returns a list of dicts
-                ('vect', DictVectorizer()),  # list of dicts -> feature matrix
-            ])),
+# pipeline_amazon = Pipeline([
+#     ('features', FeatureUnion([
+#         ('ngram_tf_idf', Pipeline([
+#             ('counts', CountVectorizer(tokenizer = featurize, lowercase=False)),
+#             ('tf_idf', TfidfTransformer())
+#         ])),
+#         ('mechturks_pipe', Pipeline([
+#             ('mecturks', MechTurks()),  # returns a list of dicts
+#             ('vect', DictVectorizer()),  # list of dicts -> feature matrix
+#         ])),
+#         ('rule_based_system', Pipeline([
+#             ('match', RuleBasedSent()),  # returns a list of dicts
+#             ('vect', DictVectorizer()),  # list of dicts -> feature matrix
+#         ]))
+#     ])),
+#     ('classifier', LinearSVC())
+# ])
+
+
+def build_sent_classifier(tweets):
+    vectorizer = FeatureUnion([
+        ('counts', TfidfVectorizer(tokenizer = featurize, lowercase=False)),
         ('rule_based_system', Pipeline([
-                ('match', RuleBasedSent()),  # returns a list of dicts
-                ('vect', DictVectorizer()),  # list of dicts -> feature matrix
-            ]))
-    ])),
-    ('classifier', LinearSVC())
-])
+            ('match', RuleBasedSent()),  # returns a list of dicts
+            ('vect', DictVectorizer()),  # list of dicts -> feature matrix
+        ])),
+    ])
+    pipeline_tfidf = Pipeline([
+        ('features', vectorizer),
+        ('classifier', LinearSVC())
+    ])
 
-
-# ## Annotate tweets with sentiment
-
-# In[118]:
-
-def df_sentiment(tweets):
     train, test = prepare_sentiment_data(tweets)
     run_pipeline(train, test, pipeline_tfidf)
-    run_pipeline(train, test, pipeline_amazon)
+    # run_pipeline(train, test, pipeline_amazon)
 
-    tweets["sent_amazon"] = pd.Series(pipeline_amazon.predict([t for i, t in tweets.iterrows()]), index=tweets.index)
-    tweets["sent_tfidf"] = pd.Series(pipeline_tfidf.predict([t for i, t in tweets.iterrows()]), index=tweets.index)
-    return tweets
+    return pipeline_tfidf
+
+
+def df_sentiment(tweets):
+    pipeline = build_sent_classifier(tweets)
+    tweets["sent_tfidf"] = pd.Series(pipeline.predict([t for i, t in tweets.iterrows()]), index=tweets.index)
+    return tweets, pipeline
