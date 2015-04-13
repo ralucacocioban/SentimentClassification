@@ -36,14 +36,15 @@
   <h4>Analyzing the transcript</h4>
 </header>
 <main ng-controller="Main" class="container paper">
-  <section ng-repeat="part in splits" class="row line" ng-init="counts = countSentiment(part.tweets)">
+  <section ng-repeat="part in splits" class="row line" ng-init="counts = countSentiment(part.tweets)" ng-class="{'small-line':counts.pos_mcc+counts.neg_mcc+counts.oth_mcc+counts.pos_oba+counts.neg_oba+counts.oth_oba == 0}">
     <div class="inside">
       <article class="col-xs-6 debate">
         <strong>{{part.debate.who}}</strong>: {{part.debate.sentence}}
         <br>
         <time>{{part.debate.date.format()}}</time>
       </article>
-      <article class="col-xs-6 dtweets">
+      <article class="col-xs-6 dtweets"
+        ng-show="counts.pos_mcc+counts.neg_mcc+counts.oth_mcc+counts.pos_oba+counts.neg_oba+counts.oth_oba > 0">
 
         <div>
         <div class="pif">
