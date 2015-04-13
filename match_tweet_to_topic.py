@@ -1,7 +1,8 @@
-import gensim, sys, os
+import gensim, sys, os, codecs
 import pandas as pd
 
 from nltk.corpus import brown
+from Politweet import get_tweets
 
 
 def train_word2vec_brown(output="datasets/brown_word2vec.model"):
@@ -73,14 +74,37 @@ def classify_transcript(fname, model):
     if not os.path.isfile(fname):
         sys.exit("Transcript file does not exist")
 
+# Load topics
+def load_topics(fname_topics):
+    topics = []
+    with codecs.open(fname_topics, 'r', 'utf-8') as f:
+        for line in f:
+            topic_num, bow = line.strip().split(" : ")
+            bow_list = bow.split(",")
+            topics.append(bow_list)
+    return topics
+
+
+def get_topic(tweetTokens):
+    # Load topics from transcript
+    topics = load_topics("topics_mapping.txt")
+    model = load_word2vec_model()
+    topic = str()
+    score = float(0.0)
+    for x in range (0, len(topics)):
+        t, s = similarity(tweetTokens, topics[x], model)
+        if float(s) > float(score):
+            topic = t
+            score = float(s)
+    return topic, score
+
 
 if __name__ == "__main__":
-    #train_word2vec_brown()
 
-    model = load_word2vec_model()
-
-    fname_transcript = "datasets/transcript.csv"
-    classify_transcript()
-
+    tweets = get_tweets("datasets/tweets.tsv")
+    for i, tweet in tweets.iterrows():
+        #print tweet["tokens"]
+        topic, score = get_topic(tweet["tokens"])
+        print "Topic:", topic, "Score:", score
     #print similarity(["economy", "money", "veteran", "peace", "oil", "war"], ["tax", "attack"], model)
     #print similarity(["tax", "money", "president", "company"], ["tax", "attack", "house", "stock"], model)
