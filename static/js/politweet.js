@@ -29,13 +29,17 @@ function divideTweetsByDebate(tweets, debate) {
       tweets_count++;
     }
     splits.push({
-      debate:debate[i-1] ? debate[i-1] : {who:"begins"},
+      debate:debate[i-1] ? debate[i-1] : {who:"Before the show"},
       tweets:during
     })
   });
 
   splits.push({
     debate: debate[debate.length-1],
+    tweets: []
+  })
+  splits.push({
+    debate: {who:"After the show"},
     tweets: tweets.slice(tweets_count-1)
   })
   return splits
