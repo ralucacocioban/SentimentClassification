@@ -50,7 +50,7 @@ var politweet = angular.module("politweet", [])
     $scope.tweets = []
     d3.csv('debatetranscript.csv', debateClean, function(err, debate) {
 
-      d3.tsv('tweets.tsv', tweetsClean, function(err, tweets) {
+      d3.csv('worked.csv', tweetsClean, function(err, tweets) {
         $scope.$apply(function() {
           $scope.debate = debate
           $scope.tweets = tweets
