@@ -79,7 +79,7 @@ def load_topics(fname_topics):
     topics = []
     with codecs.open(fname_topics, 'r', 'utf-8') as f:
         for line in f:
-            topic_num, bow = line.strip().split(" : ")
+            topic_num, bow = line.strip().split(": ")
             bow_list = bow.split(",")
             topics.append(bow_list)
     return topics
@@ -87,7 +87,7 @@ def load_topics(fname_topics):
 
 def get_topic(tweetTokens):
     # Load topics from transcript
-    topics = load_topics("topics_mapping.txt")
+    topics = load_topics("matrix_factorization_topics.txt")
     model = load_word2vec_model()
     topic = str()
     score = float(0.0)
