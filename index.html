@@ -10,23 +10,82 @@
 <header class="container">
   <h1>Politweet</h1>
 </header>
+<header class="container">
+  <h4>Overall results</h4>
+</header>
+<div class="container paper">
+  <article class="col-xs-6 debate">
+    <img src="pie1.png">
+  </article>
+  <article class="col-xs-6 debate">
+    <img src="pie2.png">
+  </article>
+</div>
+<header class="container">
+  <h4>Sentiment through time</h4>
+</header>
+<div class="container paper">
+  <article class="col-xs-6 debate">
+    <img src="obama.png">
+  </article>
+  <article class="col-xs-6 debate">
+    <img src="mccain.png">
+  </article>
+</div>
+<header class="container">
+  <h4>Analyzing the transcript</h4>
+</header>
 <main ng-controller="Main" class="container paper">
-
-  <section ng-repeat="part in splits" class="row line">
+  <section ng-repeat="part in splits" class="row line" ng-init="counts = countSentiment(part.tweets)">
     <div class="inside">
       <article class="col-xs-6 debate">
         <strong>{{part.debate.who}}</strong>: {{part.debate.sentence}}
         <br>
         <time>{{part.debate.date.format()}}</time>
       </article>
-      <article class="col-xs-4 tweets">
-        <div class="tweet" ng-repeat="tweet in part.tweets">
+      <article class="col-xs-6 dtweets">
+
+        <div>
+        <div class="pif">
+        <pie-chart class="pi" data='[
+          {label: "Positive", value: counts.pos_mcc, color: "#2ca02c"},
+          {label: "Negative", value: counts.neg_mcc, color: "#d62728"},
+          {label: "Neutral", value: counts.oth_mcc, color: "#8c564b"},
+          {label: "padding", value: counts.padding_mcc, color: "#000"}
+        ]' options="{thickness: 10}"></pie-chart>
+        <div class="name">McCain</div>
+        </div>
+
+        <div class="pif">
+          <div class="number">Number of tweets: {{counts.pos_mcc+counts.neg_mcc+counts.oth_mcc}}</div>
+          <div class="pos">Positive: {{counts.pos_mcc}}</div>
+          <div class="neg">Negative: {{counts.neg_mcc}}</div>
+          <div class="neut">Neutral: {{counts.oth_mcc}}</div>
+        </div>
+
+        <div class="pif">
+        <pie-chart class="pi" data='[
+          {label: "Positive", value: counts.pos_oba, color: "#2ca02c"},
+          {label: "Negative", value: counts.neg_oba, color: "#d62728"},
+          {label: "Neutral", value: counts.oth_oba, color: "#8c564b"},
+          {label: "padding", value: counts.padding_oba, color: "#000"}
+        ]' options="{thickness: 10}"></pie-chart>
+        <div class="name">Obama</div>
+      </div>
+      <div class="pif">
+          <div class="number">Number of tweets: {{counts.pos_oba+counts.neg_oba+counts.oth_oba}}</div>
+          <div class="pos">Positive: {{counts.pos_oba}}</div>
+          <div class="neg">Negative: {{counts.neg_oba}}</div>
+          <div class="neut">Neutral: {{counts.oth_oba}}</div>
+        </div>
+
+        <!-- <div class="tweet" ng-repeat="tweet in part.tweets">
           {{tweet.content}}
           <br>
           {{tweet.date.format()}}
-        </div>
+        </div> -->
       </article>
-      <article class="col-xs-2"></article>
+      <!-- <article class="col-xs-2"></article> -->
     </div>
   </section>
 </main>
@@ -36,6 +95,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+<script type="text/javascript" src="js/piechart.js"></script>
 <script type="text/javascript" src="js/politweet.js"></script>
 </body>
 </html>
