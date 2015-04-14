@@ -4,7 +4,7 @@
 - The IPython notebooks explanation of code
   - [Exploring Candidate classification](http://nbviewer.ipython.org/github/ralucacocioban/SentimentClassification/blob/master/Exploring%20Candidate%20classification.ipynb) (Machine learning)
   - [Exploring Sentiment analysis](http://nbviewer.ipython.org/github/ralucacocioban/SentimentClassification/blob/master/Exploring%20Sentiment%20Analysis%20with%20ML.ipynb) (Machine learning)
-  - Visualizing Sentiment and Candidates
+  - [Visualizing Sentiment and Candidates](http://nbviewer.ipython.org/github/ralucacocioban/SentimentClassification/blob/master/Visualizing%20Sentiment%20and%20Candidates.ipynb)
   - [Exploring Topic modeling with Word2Vec](http://nbviewer.ipython.org/github/ralucacocioban/SentimentClassification/blob/master/Exploring%20Topic%20modeling.ipynb)
   - [Evaluating SentiWordNet Lexicon](http://nbviewer.ipython.org/github/ralucacocioban/SentimentClassification/blob/master/Evaluating%20SentiWordNet.ipynb)
 
