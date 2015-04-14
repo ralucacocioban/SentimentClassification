@@ -18,6 +18,7 @@ from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import TfidfTransformer
 from Politweet import df_setminus
+from sklearn.metrics import classification_report
 pd.set_option('display.max_colwidth', 1200)
 
 
@@ -83,7 +84,7 @@ def run_pipeline(train, test, clsfr):
     test_x, test_y = zip(*test)
     clsfr.fit(train_x, train_y)
     # get accuracy on the test
-    scr = clsfr.score(test_x, test_y)
+    scr = classification_report(clsfr.predict(test_x), test_y)
     return scr
 
 
